@@ -2,54 +2,89 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <!-- Lock the page down: only files from this site may load, nothing may be sent anywhere. -->
   <meta http-equiv="Content-Security-Policy"
         content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
   <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="light dark">
   <title>MD to PDF</title>
+  <link rel="preload" href="vendor/fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="vendor/github.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="toolbar">
-    <strong class="brand">MD → PDF</strong>
-    <label class="btn">Open .md<input id="file" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" hidden></label>
-    <label>Page
-      <select id="page-size">
-        <option value="A4">A4</option>
-        <option value="Letter">Letter</option>
-        <option value="Legal">Legal</option>
-      </select>
-    </label>
-    <label>Margin
-      <select id="margin">
-        <option value="10mm">Narrow</option>
-        <option value="18mm" selected>Normal</option>
-        <option value="25mm">Wide</option>
-      </select>
-    </label>
-    <label>Font
-      <select id="font">
-        <option value="sans">Sans</option>
-        <option value="serif">Serif</option>
-      </select>
-    </label>
-    <label><input id="page-breaks" type="checkbox"> Break before H1</label>
-    <span class="spacer"></span>
-    <button id="export" class="btn primary">Download PDF</button>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">md<span>→</span>pdf</span>
+    </div>
+
+    <div class="controls" role="group" aria-label="Page setup">
+      <fieldset class="seg" aria-label="Paper size">
+        <legend>Paper</legend>
+        <input type="radio" name="page-size" id="size-a4" value="A4" checked><label for="size-a4">A4</label>
+        <input type="radio" name="page-size" id="size-letter" value="Letter"><label for="size-letter">Letter</label>
+        <input type="radio" name="page-size" id="size-legal" value="Legal"><label for="size-legal">Legal</label>
+      </fieldset>
+
+      <fieldset class="seg" aria-label="Margins">
+        <legend>Margins</legend>
+        <input type="radio" name="margin" id="margin-10" value="10"><label for="margin-10">Narrow</label>
+        <input type="radio" name="margin" id="margin-18" value="18" checked><label for="margin-18">Normal</label>
+        <input type="radio" name="margin" id="margin-25" value="25"><label for="margin-25">Wide</label>
+      </fieldset>
+
+      <fieldset class="seg" aria-label="Typeface">
+        <legend>Type</legend>
+        <input type="radio" name="font" id="font-sans" value="sans" checked><label for="font-sans">Sans</label>
+        <input type="radio" name="font" id="font-serif" value="serif"><label for="font-serif" class="serif-label">Serif</label>
+      </fieldset>
+
+      <label class="switch" for="page-breaks">
+        <input id="page-breaks" type="checkbox" role="switch">
+        <span class="track" aria-hidden="true"></span>
+        <span>New page per H1</span>
+      </label>
+    </div>
+
+    <div class="actions">
+      <label class="btn ghost" for="file">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10v2.25c0 .7.55 1.25 1.25 1.25h8.5c.7 0 1.25-.55 1.25-1.25V10"/></svg>
+        Open
+      </label>
+      <input id="file" type="file" accept=".md,.markdown,.txt,text/markdown,text/plain" hidden>
+      <button id="export" class="btn primary" type="button">
+        Export PDF <kbd id="kbd">⌘P</kbd>
+      </button>
+    </div>
   </header>
 
-  <main class="panes">
-    <textarea id="editor" spellcheck="false" placeholder="Paste or type Markdown, or drop a .md file here…"></textarea>
-    <div class="preview-wrap">
-      <article id="preview" class="markdown-body"></article>
-    </div>
+  <main class="workspace">
+    <section class="pane pane-editor" aria-label="Markdown source">
+      <div class="pane-head">
+        <span class="pane-title" id="doc-name">document.md</span>
+        <span class="pane-meta" id="stats">0 words</span>
+      </div>
+      <textarea id="editor" spellcheck="false" placeholder="Paste or type Markdown, or drop a .md file anywhere…"></textarea>
+    </section>
+
+    <section class="pane pane-preview" aria-label="PDF preview">
+      <div class="pane-head">
+        <span class="pane-title">Preview</span>
+        <span class="pane-meta" id="paper-meta">A4 · 210 × 297 mm</span>
+      </div>
+      <div class="desk" id="desk">
+        <article id="preview" class="markdown-body paper"></article>
+      </div>
+    </section>
   </main>
 
-  <footer class="footer">This website runs entirely in your browser. Your data is never sent to a server.</footer>
+  <footer class="footer">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2M3.5 7h9v6.5h-9z"/></svg>
+    This website runs entirely in your browser. Your data is never sent to a server.
+  </footer>
 
-  <div id="drop" class="drop" hidden>Drop your .md file</div>
+  <div id="drop" class="drop" hidden><div class="drop-card">Drop to open your Markdown file</div></div>
 
   <script src="vendor/marked.min.js"></script>
   <script src="vendor/purify.min.js"></script>
