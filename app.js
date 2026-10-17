@@ -163,23 +163,26 @@ function hello(name) {
   });
   if (!/Mac|iPhone|iPad/.test(navigator.platform)) $('kbd').textContent = 'Ctrl P';
 
-  // ---------- theme: system → light → dark ----------
+  // ---------- theme: follows the system until the first click, then light ⇄ dark ----------
   const THEME_KEY = 'md2pdf:theme';
   const themeBtn = $('theme');
-  function setTheme(mode) {
-    if (mode === 'system') delete document.documentElement.dataset.theme;
-    else document.documentElement.dataset.theme = mode;
+  const darkQuery = matchMedia('(prefers-color-scheme: dark)');
+  const effectiveTheme = () => document.documentElement.dataset.theme || (darkQuery.matches ? 'dark' : 'light');
+  function syncThemeButton() {
+    const mode = effectiveTheme();
+    const next = mode === 'dark' ? 'light' : 'dark';
     themeBtn.dataset.mode = mode;
-    const label = `Theme: ${mode}`;
-    themeBtn.title = label;
-    themeBtn.setAttribute('aria-label', label);
-    try { localStorage.setItem(THEME_KEY, mode); } catch { /* fine */ }
+    themeBtn.title = `Switch to ${next} theme`;
+    themeBtn.setAttribute('aria-label', `Switch to ${next} theme`);
   }
   themeBtn.addEventListener('click', () => {
-    const order = ['system', 'light', 'dark'];
-    setTheme(order[(order.indexOf(themeBtn.dataset.mode) + 1) % order.length]);
+    const next = effectiveTheme() === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem(THEME_KEY, next); } catch { /* fine */ }
+    syncThemeButton();
   });
-  setTheme(document.documentElement.dataset.theme || 'system');
+  darkQuery.addEventListener('change', syncThemeButton);
+  syncThemeButton();
 
   // ---------- init ----------
   const saved = load();
