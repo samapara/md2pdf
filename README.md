@@ -17,11 +17,8 @@ The PDF is produced by the browser's print engine, so text stays selectable and 
 Tip: in Chrome's print dialog, untick "Headers and footers" for a clean page.
 
 ## Host on GitHub Pages
-```sh
-git remote add origin git@github.com:<you>/md2pdf.git
-git push -u origin main
-```
-Then repo **Settings → Pages → Deploy from branch → `main` / root**.
+`.github/workflows/pages.yml` deploys the site on every push to `main`
+(repo **Settings → Pages → Source: GitHub Actions**).
 
 ## Run locally
 Open `index.html` directly, or `python3 -m http.server` in this folder.
