@@ -163,6 +163,24 @@ function hello(name) {
   });
   if (!/Mac|iPhone|iPad/.test(navigator.platform)) $('kbd').textContent = 'Ctrl P';
 
+  // ---------- theme: system → light → dark ----------
+  const THEME_KEY = 'md2pdf:theme';
+  const themeBtn = $('theme');
+  function setTheme(mode) {
+    if (mode === 'system') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = mode;
+    themeBtn.dataset.mode = mode;
+    const label = `Theme: ${mode}`;
+    themeBtn.title = label;
+    themeBtn.setAttribute('aria-label', label);
+    try { localStorage.setItem(THEME_KEY, mode); } catch { /* fine */ }
+  }
+  themeBtn.addEventListener('click', () => {
+    const order = ['system', 'light', 'dark'];
+    setTheme(order[(order.indexOf(themeBtn.dataset.mode) + 1) % order.length]);
+  });
+  setTheme(document.documentElement.dataset.theme || 'system');
+
   // ---------- init ----------
   const saved = load();
   editor.value = saved.text ?? SAMPLE;

@@ -173,6 +173,10 @@ svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width:
 .btn:active { transform: translateY(1px); }
 .btn.ghost { background: transparent; color: var(--fg); border-color: var(--line); }
 .btn.ghost:hover { background: var(--chip); }
+.btn.icon { width: 34px; padding: 0; justify-content: center; }
+.btn.icon svg { width: 16px; height: 16px; }
+#theme svg { display: none; }
+#theme[data-mode="system"] .i-system, #theme[data-mode="light"] .i-light, #theme[data-mode="dark"] .i-dark { display: block; }
 .btn.primary { background: var(--accent); color: var(--accent-fg); }
 .btn.primary:hover { box-shadow: 0 0 0 4px var(--accent-ring); }
 .btn kbd {

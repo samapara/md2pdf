@@ -10,6 +10,7 @@
   <meta name="color-scheme" content="light dark">
   <title>MD to PDF</title>
   <link rel="preload" href="vendor/fonts/figtree.woff2" as="font" type="font/woff2" crossorigin>
+  <script src="theme.js"></script>
   <link rel="stylesheet" href="vendor/github.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -48,6 +49,11 @@
     </div>
 
     <div class="actions">
+      <button id="theme" class="btn ghost icon" type="button" aria-label="Theme: system" title="Theme: system">
+        <svg class="i-system" viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 3.5h11v7.5h-11zM6 13.5h4M8 11v2.5"/></svg>
+        <svg class="i-light" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="2.75"/><path d="M8 1.5v1.5M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1.06 1.06M11.54 11.54l1.06 1.06M3.4 12.6l1.06-1.06M11.54 4.46l1.06-1.06"/></svg>
+        <svg class="i-dark" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.25 9.6A5.5 5.5 0 1 1 6.4 2.75a4.5 4.5 0 0 0 6.85 6.85z"/></svg>
+      </button>
       <label class="btn ghost" for="file">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10v2.25c0 .7.55 1.25 1.25 1.25h8.5c.7 0 1.25-.55 1.25-1.25V10"/></svg>
         Open
